@@ -8,7 +8,7 @@ import (
 type Config struct {
 	Port         uint
 	Listen       string
-	Destinations map[string]interface{}
+	Destinations map[string]string
 }
 
 func NewConfig(filename string) (*Config, error) {

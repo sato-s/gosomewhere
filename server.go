@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"github.com/agnivade/levenshtein"
+	"math"
 	"net/http"
 	"strings"
 )
@@ -36,6 +38,20 @@ func (s *Server) getDestination(path string) (string, bool) {
 	// Remove slash
 	d := strings.TrimPrefix(path, "/")
 	d = strings.TrimSuffix(d, "/")
-	destination, found := s.config.Destinations[d].(string)
-	return destination, found
+	// Find closest destination using edit distance (=levenshtein distance).
+	var destination string
+	minDistance := math.MaxInt32
+	for k, v := range s.config.Destinations {
+		distance := levenshtein.ComputeDistance(k, d)
+		if distance < minDistance {
+			minDistance = distance
+			destination = v
+		}
+	}
+
+	if minDistance < 8 {
+		return destination, true
+	} else {
+		return "", false
+	}
 }
