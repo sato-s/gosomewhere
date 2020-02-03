@@ -1,0 +1,6 @@
+port: 8088
+listen: 0.0.0.0
+destinations:
+  shopping: https://www.amazon.com/
+  creditcard: https://www.smbc-card.com/mem/index.jsp
+  search: https://www.google.co.jp
