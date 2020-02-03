@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/agnivade/levenshtein"
+	"log"
 	"math"
 	"net/http"
 	"strings"
@@ -21,6 +22,7 @@ func NewServer(config *Config) (*Server, error) {
 
 func (s *Server) run() error {
 	http.HandleFunc("/", s.handleHttp)
+	log.Println("running server....")
 	err := http.ListenAndServe(fmt.Sprintf("%s:%d", s.config.Listen, s.config.Port), nil)
 	return err
 }
