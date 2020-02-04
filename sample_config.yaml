@@ -1,6 +1,9 @@
-port: 8088
+port: 80
 listen: 0.0.0.0
 destinations:
   shopping: https://www.amazon.com/
   creditcard: https://www.smbc-card.com/mem/index.jsp
   search: https://www.google.co.jp
+  vim: https://vim.rtorr.com/
+  ascii: https://en.wikipedia.org/wiki/ASCII#Printable_characters
+  digital-ocean: https://developers.digitalocean.com/documentation/v2/
