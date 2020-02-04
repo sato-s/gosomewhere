@@ -12,7 +12,7 @@ type Config struct {
 }
 
 func NewConfig(filename string) (*Config, error) {
-	data, err := ioutil.ReadFile("sample_config.yaml")
+	data, err := ioutil.ReadFile(filename)
 	if err != nil {
 		return nil, err
 	}
