@@ -23,10 +23,16 @@ func main() {
 		user, err := user.Current()
 		check(err)
 		configFile = filepath.Join(user.HomeDir, ".config/bookmark301/config.yaml")
+		_, err = os.Stat(configFile)
+		if err != nil {
+			log.Fatal("You didn't provide config.yaml and we couldn't find " + configFile)
+		}
 	case 2:
 		// Config file is provided, use it
 		configFile, err = filepath.Abs(os.Args[1])
-		check(err)
+		if err != nil {
+			log.Fatal("We couldn't find " + configFile)
+		}
 	case 3:
 		log.Fatal("Invalid argument")
 	}
@@ -37,5 +43,10 @@ func main() {
 	check(err)
 
 	_, err = NewServer(config)
-	check(err)
+	if err != nil {
+		log.Println(err)
+		msg := "We couldn't run server. If this is port permission problem," +
+			" run this probram with sudo privilege."
+		log.Fatal(msg)
+	}
 }
