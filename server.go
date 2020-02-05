@@ -31,7 +31,7 @@ func (s *Server) handleHttp(w http.ResponseWriter, r *http.Request) {
 	destination, found := s.getDestination(r.URL.Path)
 	if found {
 		log.Printf("Redirect %s to %s", r.URL.Path, destination)
-		http.Redirect(w, r, destination, 301)
+		http.Redirect(w, r, destination, 307)
 	} else {
 		log.Printf("Could not find %s from destinations", r.URL.Path)
 		http.NotFound(w, r)
