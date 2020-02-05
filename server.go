@@ -53,7 +53,7 @@ func (s *Server) getDestination(path string) (string, bool) {
 		}
 	}
 
-	if minDistance < 8 {
+	if minDistance < 5 {
 		return destination, true
 	} else {
 		return "", false
