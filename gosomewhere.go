@@ -19,10 +19,10 @@ func main() {
 
 	switch len(os.Args) {
 	case 1:
-		// Config file isn't provided, check $HOME/.config/bookmark301/config.yaml
+		// Config file isn't provided, check $HOME/.config/gosomewhere/config.yaml
 		user, err := user.Current()
 		check(err)
-		configFile = filepath.Join(user.HomeDir, ".config/bookmark301/config.yaml")
+		configFile = filepath.Join(user.HomeDir, ".config/gosomewhere/config.yaml")
 		_, err = os.Stat(configFile)
 		if err != nil {
 			log.Fatal("You didn't provide config.yaml and we couldn't find " + configFile)

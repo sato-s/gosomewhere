@@ -1,10 +1,10 @@
-bookmark301
+gosomewhere
 ----------------
 
 ## Install
 
 ```
-go get -u github.com/sato-s/bookmark301
+go get -u github.com/sato-s/gosomewhere
 ```
 
 Make sure you have PATH to `$GOPATH/bin`.  
@@ -30,7 +30,7 @@ EOF
 Run server  
 
 ```
-bookmark301 config.yaml
+gosomewhere config.yaml
 ```
 
 Go to `localhost/vim` to check vim cheetsheet!.  
