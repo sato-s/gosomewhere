@@ -30,7 +30,8 @@ EOF
 Run server  
 
 ```
-gosomewhere config.yaml
+sudo env "PATH=$PATH" gosomewhere config.yaml
+# require `sudo` to use port 80
 ```
 
 Go to `localhost/vim` to check vim cheetsheet!.  
