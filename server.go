@@ -22,7 +22,7 @@ func NewServer(config *Config) (*Server, error) {
 
 func (s *Server) run() error {
 	http.HandleFunc("/", s.handleHttp)
-	log.Println("running server....")
+	log.Printf("running server.... port:%d listening:%s", s.config.Port, s.config.Listen)
 	err := http.ListenAndServe(fmt.Sprintf("%s:%d", s.config.Listen, s.config.Port), nil)
 	return err
 }
