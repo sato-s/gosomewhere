@@ -1,0 +1,7 @@
+<html>
+  <h1>gosomewhere</h1>
+  <h2>Available destinations</h2>
+  {{ range $key, $value := .Destinations }}
+  <li>{{ $key }}: -> {{ $value }}</li>
+  {{ end }}
+</html>

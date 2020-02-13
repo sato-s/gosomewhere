@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"github.com/agnivade/levenshtein"
+	"html/template"
 	"log"
 	"math"
 	"net/http"
@@ -10,12 +11,15 @@ import (
 )
 
 type Server struct {
-	config *Config
+	config    *Config
+	templates *template.Template
 }
 
 func NewServer(config *Config) (*Server, error) {
+	templates := template.Must(template.ParseGlob("templates/*"))
 	s := &Server{
-		config: config,
+		config:    config,
+		templates: templates,
 	}
 	return s, s.run()
 }
@@ -33,8 +37,14 @@ func (s *Server) handleHttp(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Redirect %s to %s", r.URL.Path, destination)
 		http.Redirect(w, r, destination, 307)
 	} else {
-		log.Printf("Could not find %s from destinations", r.URL.Path)
-		http.NotFound(w, r)
+		s.handleDestinationUncertain(w, r)
+	}
+}
+
+// Serve default html page if we can't determine target
+func (s *Server) handleDestinationUncertain(w http.ResponseWriter, r *http.Request) {
+	if err := s.templates.ExecuteTemplate(w, "index.html", s.config); err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
 	}
 }
 
@@ -53,7 +63,7 @@ func (s *Server) getDestination(path string) (string, bool) {
 		}
 	}
 
-	if minDistance < 5 {
+	if minDistance < 2 {
 		return destination, true
 	} else {
 		return "", false
