@@ -1,6 +1,8 @@
 package main
 
 import (
+	"flag"
+	"fmt"
 	"log"
 	"os"
 	"os/user"
@@ -17,8 +19,11 @@ func main() {
 	var configFile string
 	var err error
 
-	switch len(os.Args) {
-	case 1:
+	flag.StringVar(&configFile, "config", "", "config yaml")
+	flag.Parse()
+	fmt.Printf("%s|\n", configFile)
+
+	if configFile == "" {
 		// Config file isn't provided, check $HOME/.config/gosomewhere/config.yaml
 		user, err := user.Current()
 		check(err)
@@ -27,14 +32,12 @@ func main() {
 		if err != nil {
 			log.Fatal("You didn't provide config.yaml and we couldn't find " + configFile)
 		}
-	case 2:
+	} else {
 		// Config file is provided, use it
-		configFile, err = filepath.Abs(os.Args[1])
+		configFile, err = filepath.Abs(configFile)
 		if err != nil {
 			log.Fatal("We couldn't find " + configFile)
 		}
-	case 3:
-		log.Fatal("Invalid argument")
 	}
 
 	log.Println("using " + configFile)

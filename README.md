@@ -30,7 +30,7 @@ EOF
 Run server  
 
 ```
-sudo env "PATH=$PATH" gosomewhere config.yaml
+sudo env "PATH=$PATH" gosomewhere --config config.yaml
 # require `sudo` to use port 80
 ```
 
