@@ -9,14 +9,19 @@ type Config struct {
 	Port         uint
 	Listen       string
 	Destinations map[string]string
+	filename     string
 }
 
 func NewConfig(filename string) (*Config, error) {
-	data, err := ioutil.ReadFile(filename)
+	config := &Config{filename: filename}
+	return config, config.loadFile()
+}
+
+func (c *Config) loadFile() error {
+	data, err := ioutil.ReadFile(c.filename)
 	if err != nil {
-		return nil, err
+		return err
 	}
-	config := Config{}
-	err = yaml.Unmarshal([]byte(data), &config)
-	return &config, err
+	err = yaml.Unmarshal([]byte(data), &c)
+	return err
 }
