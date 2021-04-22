@@ -1,5 +1,8 @@
 port: 80
 listen: 0.0.0.0
+# basicauth:
+#   username: "hoge"
+#   password: "fuga"
 destinations:
   shopping: https://www.amazon.com/
   creditcard: https://www.smbc-card.com/mem/index.jsp

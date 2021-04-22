@@ -11,8 +11,12 @@ type Config struct {
 	Port         uint
 	Listen       string
 	Destinations map[string]string
-	filename     string
-	watcher      *fsnotify.Watcher
+	Basicauth    struct {
+		Username string
+		Password string
+	}
+	filename string
+	watcher  *fsnotify.Watcher
 }
 
 func NewConfig(filename string) (*Config, error) {
@@ -25,6 +29,10 @@ func NewConfig(filename string) (*Config, error) {
 		return nil, err
 	}
 	return config, nil
+}
+
+func (c *Config) IsBasicauthEnabled() bool {
+	return c.Basicauth.Username != "" && c.Basicauth.Password != ""
 }
 
 func (c *Config) loadFile() error {
