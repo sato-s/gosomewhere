@@ -48,20 +48,20 @@ func (s *Server) handleHttp(w http.ResponseWriter, r *http.Request) {
 		log.Printf("Basic auth success")
 	}
 
-	// Render "/" page
 	if r.URL.Path == "/" {
+		// Render "/" page
 		s.handleTopPage(w, r)
-		return
+	} else {
+		destination, found := s.getDestination(r.URL.Path)
+		if found {
+			log.Printf("Redirect %s to %s", r.URL.Path, destination)
+			http.Redirect(w, r, destination, 307)
+		} else {
+			log.Printf("Could not find %s from destinations", r.URL.Path)
+			http.NotFound(w, r)
+		}
 	}
 
-	destination, found := s.getDestination(r.URL.Path)
-	if found {
-		log.Printf("Redirect %s to %s", r.URL.Path, destination)
-		http.Redirect(w, r, destination, 307)
-	} else {
-		log.Printf("Could not find %s from destinations", r.URL.Path)
-		http.NotFound(w, r)
-	}
 }
 
 func (s *Server) checkAuthHeader(r *http.Request) error {
