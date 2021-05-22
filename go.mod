@@ -1,6 +1,6 @@
 module github.com/sato-s/gosomewhere
 
-go 1.14
+go 1.16
 
 require (
 	github.com/agnivade/levenshtein v1.0.3
