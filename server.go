@@ -1,6 +1,7 @@
 package main
 
 import (
+	_ "embed"
 	"fmt"
 	"github.com/agnivade/levenshtein"
 	"log"
@@ -9,13 +10,18 @@ import (
 	"strings"
 )
 
+//go:embed index.html
+var indexHTML string
+
 type Server struct {
-	config *Config
+	config  *Config
+	topPage string
 }
 
 func NewServer(config *Config) (*Server, error) {
 	s := &Server{
-		config: config,
+		config:  config,
+		topPage: indexHTML,
 	}
 	return s, s.run()
 }
@@ -41,14 +47,21 @@ func (s *Server) handleHttp(w http.ResponseWriter, r *http.Request) {
 	} else {
 		log.Printf("Basic auth success")
 	}
-	destination, found := s.getDestination(r.URL.Path)
-	if found {
-		log.Printf("Redirect %s to %s", r.URL.Path, destination)
-		http.Redirect(w, r, destination, 307)
+
+	if r.URL.Path == "/" {
+		// Render "/" page
+		s.handleTopPage(w, r)
 	} else {
-		log.Printf("Could not find %s from destinations", r.URL.Path)
-		http.NotFound(w, r)
+		destination, found := s.getDestination(r.URL.Path)
+		if found {
+			log.Printf("Redirect %s to %s", r.URL.Path, destination)
+			http.Redirect(w, r, destination, 307)
+		} else {
+			log.Printf("Could not find %s from destinations", r.URL.Path)
+			http.NotFound(w, r)
+		}
 	}
+
 }
 
 func (s *Server) checkAuthHeader(r *http.Request) error {
@@ -62,6 +75,11 @@ func (s *Server) checkAuthHeader(r *http.Request) error {
 	}
 
 	return fmt.Errorf("username or password doensn't match")
+}
+
+func (s *Server) handleTopPage(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	fmt.Fprint(w, s.topPage)
 }
 
 func (s *Server) getDestination(path string) (string, bool) {
