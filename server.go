@@ -1,7 +1,6 @@
 package main
 
 import (
-	_ "embed"
 	"fmt"
 	"github.com/agnivade/levenshtein"
 	"log"
@@ -10,18 +9,19 @@ import (
 	"strings"
 )
 
-//go:embed index.html
-var indexHTML string
-
 type Server struct {
 	config  *Config
-	topPage string
+	topPage *TopPage
 }
 
 func NewServer(config *Config) (*Server, error) {
+	topPage, err := NewTopPage()
+	if err != nil {
+		return nil, err
+	}
 	s := &Server{
 		config:  config,
-		topPage: indexHTML,
+		topPage: topPage,
 	}
 	return s, s.run()
 }
@@ -79,7 +79,10 @@ func (s *Server) checkAuthHeader(r *http.Request) error {
 
 func (s *Server) handleTopPage(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "text/html; charset=utf-8")
-	fmt.Fprint(w, s.topPage)
+	err := s.topPage.Execute(w)
+	if err != nil {
+		log.Printf("Failed to render topPage %+v", err)
+	}
 }
 
 func (s *Server) getDestination(path string) (string, bool) {
