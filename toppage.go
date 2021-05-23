@@ -10,6 +10,12 @@ import (
 //go:embed toppage/index.html
 var indexHTML string
 
+//go:embed toppage/jquery-3.6.0.min.js
+var jqueryJS template.JS
+
+//go:embed toppage/list.min.js
+var listJS template.JS
+
 type TopPage struct {
 	template *template.Template
 }
@@ -23,5 +29,9 @@ func NewTopPage() (*TopPage, error) {
 }
 
 func (t *TopPage) Execute(wr io.Writer) error {
-	return t.template.Execute(wr, struct{}{})
+	data := struct {
+		JqueryJS template.JS
+		ListJS   template.JS
+	}{JqueryJS: jqueryJS, ListJS: listJS}
+	return t.template.Execute(wr, data)
 }
