@@ -15,7 +15,7 @@ type Server struct {
 }
 
 func NewServer(config *Config) (*Server, error) {
-	topPage, err := NewTopPage()
+	topPage, err := NewTopPage(config.Destinations)
 	if err != nil {
 		return nil, err
 	}

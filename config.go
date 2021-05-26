@@ -7,10 +7,11 @@ import (
 	"log"
 )
 
+type Destinations map[string]string
 type Config struct {
 	Port         uint
 	Listen       string
-	Destinations map[string]string
+	Destinations Destinations
 	Basicauth    struct {
 		Username string
 		Password string
