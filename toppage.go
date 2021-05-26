@@ -29,24 +29,12 @@ func NewTopPage(destinations Destinations) (*TopPage, error) {
 	return &TopPage{template: template, destinations: destinations}, nil
 }
 
-type Element struct {
-	Name string
-	URL  string
-}
-
-func (t *TopPage) list() []Element {
-	var list []Element
-	for k, v := range t.destinations {
-		list = append(list, Element{Name: k, URL: v})
-	}
-	return list
-}
-
 func (t *TopPage) Execute(wr io.Writer) error {
+	htmlList := CreateHTMLList(t.destinations)
 	data := struct {
 		JqueryJS template.JS
 		ListJS   template.JS
 		List     []Element
-	}{JqueryJS: jqueryJS, ListJS: listJS, List: t.list()}
+	}{JqueryJS: jqueryJS, ListJS: listJS, List: htmlList}
 	return t.template.Execute(wr, data)
 }
