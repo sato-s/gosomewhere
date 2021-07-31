@@ -86,7 +86,6 @@ func (s *Server) handleTopPage(w http.ResponseWriter, r *http.Request) {
 }
 
 func (s *Server) getDestination(path string) (string, bool) {
-	// Remove slash
 	d := strings.TrimPrefix(path, "/")
 	d = strings.TrimSuffix(d, "/")
 	// Find closest destination using edit distance (=levenshtein distance).
